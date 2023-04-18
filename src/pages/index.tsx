@@ -29,10 +29,10 @@ export default function EditorPage() {
       <h1>Active Note: {activeNote}</h1>
       <div style={{ height: "500px", width: "500px" }}>
         <div style={{ border: "solid 1px" }}>
-          <EditorCSR initialEditorState={currentEditorState} id={activeNote} />
+          <EditorCSR initialEditorState={currentEditorState} noteId={activeNote} />
         </div>
         <div style={{ border: "solid 1px" }}>
-          <EditorCSR initialEditorState={currentEditorState} id={activeNote} />
+          <EditorCSR initialEditorState={currentEditorState} noteId={activeNote} />
         </div>
       </div>
     </>
