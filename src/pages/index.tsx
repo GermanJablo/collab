@@ -18,7 +18,6 @@ export default function EditorPage() {
   const handleSetActiveNote = (note: string) => {
     setActiveNote(note);
     const editorState = localStorage.getItem(note);
-    console.log("loading editor state", note, editorState);
     if (editorState) setCurrentEditorState(editorState);
   }
 

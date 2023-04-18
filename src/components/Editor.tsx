@@ -53,7 +53,7 @@ export default function Editor({
         initialEditorState={initialEditorState}
         shouldBootstrap={true}
       />
-      <OnChangePlugin onChange={saveEditorState} />
+      <OnChangePlugin onChange={saveEditorState} ignoreSelectionChange />
     </LexicalComposer>
   );
 }
