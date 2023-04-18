@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
@@ -7,6 +8,8 @@ import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
 import * as Y from "yjs";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { type EditorState } from "lexical";
+import {type Provider} from '@lexical/yjs';
+import { IndexeddbPersistence } from "y-indexeddb";
 
 export default function Editor({
   initialEditorState,
@@ -36,24 +39,34 @@ export default function Editor({
       />
       <CollaborationPlugin
         id={noteId}
-        providerFactory={(id, yjsDocMap) => {
-          const doc = new Y.Doc();
-          yjsDocMap.set(id, doc);
-
-          const provider = new WebsocketProvider(
-            "ws://localhost:1234",
-            id,
-            doc
-          );
-
-          provider.on("sync", () => console.log("sync"));
-
-          return provider;
-        }}
+        providerFactory={createWebsocketProvider}
         initialEditorState={initialEditorState}
         shouldBootstrap={true}
       />
       <OnChangePlugin onChange={saveEditorState} ignoreSelectionChange />
     </LexicalComposer>
   );
+}
+
+function createWebsocketProvider(
+  id: string,
+  yjsDocMap: Map<string, Y.Doc>,
+): Provider {
+  const doc = new Y.Doc();
+  yjsDocMap.set(id, doc);
+
+  const idbProvider = new IndexeddbPersistence(id, doc);
+
+  const wsProvider = new WebsocketProvider(
+    "ws://localhost:1234",
+    id,
+    doc,
+    {
+      connect: false,
+    },
+  );
+  
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return wsProvider;
 }
