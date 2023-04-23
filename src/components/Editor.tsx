@@ -10,7 +10,11 @@ import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { type EditorState } from "lexical";
 import { type Provider } from "@lexical/yjs";
 import { IndexeddbPersistence } from "y-indexeddb";
-import { HocuspocusProvider } from "@hocuspocus/provider";
+import { HocuspocusProvider, HocuspocusProviderWebsocket, TiptapCollabProvider } from "@hocuspocus/provider";
+
+const socket = new HocuspocusProviderWebsocket({
+  url: 'ws://localhost:1234',
+})
 
 export default function Editor({
   initialEditorState,
@@ -56,47 +60,27 @@ function createWebsocketProvider(
   const doc = new Y.Doc();
   yjsDocMap.set(id, doc);
 
-  const idbProvider = new IndexeddbPersistence(id, doc);
-  idbProvider.once("synced", () => {
-    console.log("idb");
-  });
+  // const idbProvider = new IndexeddbPersistence(id, doc);
+  // idbProvider.once("synced", () => {
+  //   console.log("idb");
+  // });
 
-  const wsProvider = new WebsocketProvider("ws://localhost:1234", id, doc, {
-    connect: false,
-  });
+  // const wsProvider = new WebsocketProvider("ws://localhost:1234", id, doc, {
+  //   connect: false,
+  // });
 
-  const hocuspocusProvider = new HocuspocusProvider({
-    url: "ws://localhost:1234",
+  const hocuspocusProvider = new TiptapCollabProvider({
+    websocketProvider: socket,
+    appId: 'vykoj4m5',
     name: id,
+    token: "test",
     document: doc,
   });
 
-  wsProvider.on("sync", () => console.log("ws"));
+  // wsProvider.on("sync", () => console.log("ws"));
   hocuspocusProvider.on("sync", () => console.log("hocuspocus"));
-
-  // return {
-  //   connect() {
-  //     wsProvider.connect();
-  //     hocuspocusProvider.connect();
-  //   },
-
-  //   disconnect() {
-  //     wsProvider.connect();
-  //   },
-
-  //   on(event, callback) {
-  //     // ...
-  //   },
-
-  //   off(event, callback) {
-  //     // ...
-  //   },
-
-  //   // idbProvider does not do anything with awareness
-  //   awareness: wsProvider.awareness,
-  // }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  return wsProvider;
+  return hocuspocusProvider;
 }
