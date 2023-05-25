@@ -5,9 +5,9 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "lint": "next lint",
-    "lint-fix": "next lint --fix",
     "start": "next start",
+    "collab-server": "node src/server.js",
+    "lint": "next lint --fix",
     "check-types": "tsc --noemit",
     "prettier": "prettier --write ."
   },
@@ -28,8 +28,6 @@
     "next": "13.1.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "y-indexeddb": "^9.0.9",
-    "y-websocket": "^1.5.0",
     "yjs": "^13.5.44"
   },
   "devDependencies": {
