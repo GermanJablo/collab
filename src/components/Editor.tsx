@@ -7,17 +7,9 @@ import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
 import * as Y from "yjs";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { type Provider } from "@lexical/yjs";
-import {
-  HocuspocusProvider,
-} from "@hocuspocus/provider";
+import { HocuspocusProvider } from "@hocuspocus/provider";
 
-export default function Editor({
-  initialEditorState,
-  noteId,
-}: {
-  initialEditorState: string | null;
-  noteId: string;
-}) {
+export default function Editor({ noteId }: { noteId: string }) {
   return (
     <LexicalComposer
       key={noteId}
@@ -36,7 +28,6 @@ export default function Editor({
       <CollaborationPlugin
         id={noteId}
         providerFactory={createWebsocketProvider}
-        initialEditorState={initialEditorState}
         shouldBootstrap={true}
       />
     </LexicalComposer>
@@ -50,14 +41,13 @@ function createWebsocketProvider(
   const doc = new Y.Doc();
   yjsDocMap.set(id, doc);
 
-
   const hocuspocusProvider = new HocuspocusProvider({
     url: `ws://localhost:7398`,
     name: `test-${id}`,
     document: doc,
     onConnect: () => {
       console.log("connected to:", `test-${id}`);
-    }
+    },
   });
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
