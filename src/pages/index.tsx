@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import React, { useEffect } from "react";
+import React from "react";
 
 const EditorCSR = dynamic(() => import("../components/Editor"), {
   ssr: false,

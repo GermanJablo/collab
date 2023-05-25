@@ -5,9 +5,10 @@ import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
 import * as Y from "yjs";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { type Provider } from "@lexical/yjs";
 import { HocuspocusProvider } from "@hocuspocus/provider";
+import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { useEffect } from "react";
 
 export default function Editor({ noteId }: { noteId: string }) {
   return (
@@ -24,7 +25,7 @@ export default function Editor({ noteId }: { noteId: string }) {
         placeholder={<div>Enter some text...</div>}
         ErrorBoundary={LexicalErrorBoundary}
       />
-      <OnChangePlugin onChange={() => console.log("change")} />
+      <ListenerPlugin />
       <CollaborationPlugin
         id={noteId}
         providerFactory={createWebsocketProvider}
@@ -34,6 +35,18 @@ export default function Editor({ noteId }: { noteId: string }) {
   );
 }
 
+function ListenerPlugin() {
+  const [editor] = useLexicalComposerContext();
+
+  useEffect(() => {
+    return editor.registerTextContentListener(() =>
+      console.log("content changed")
+    );
+  }, [editor]);
+
+  return null;
+}
+
 function createWebsocketProvider(
   id: string,
   yjsDocMap: Map<string, Y.Doc>
@@ -41,7 +54,9 @@ function createWebsocketProvider(
   const doc = new Y.Doc();
   yjsDocMap.set(id, doc);
 
-  const hocuspocusProvider = new HocuspocusProvider({
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return new HocuspocusProvider({
     url: `ws://localhost:7398`,
     name: `test-${id}`,
     document: doc,
@@ -49,8 +64,4 @@ function createWebsocketProvider(
       console.log("connected to:", `test-${id}`);
     },
   });
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  return hocuspocusProvider;
 }
