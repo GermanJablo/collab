@@ -2,19 +2,14 @@
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
-import { WebsocketProvider } from "y-websocket";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
 import * as Y from "yjs";
 import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import { type EditorState } from "lexical";
 import { type Provider } from "@lexical/yjs";
-import { IndexeddbPersistence } from "y-indexeddb";
-import { HocuspocusProvider, HocuspocusProviderWebsocket, TiptapCollabProvider } from "@hocuspocus/provider";
-
-const socket = new HocuspocusProviderWebsocket({
-  url: 'ws://localhost:1234',
-})
+import {
+  HocuspocusProvider,
+} from "@hocuspocus/provider";
 
 export default function Editor({
   initialEditorState,
@@ -23,11 +18,6 @@ export default function Editor({
   initialEditorState: string | null;
   noteId: string;
 }) {
-  const saveEditorState = (editorState: EditorState) => {
-    console.log("saving editor state", noteId);
-    localStorage.setItem(noteId, JSON.stringify(editorState));
-  };
-
   return (
     <LexicalComposer
       key={noteId}
@@ -42,13 +32,13 @@ export default function Editor({
         placeholder={<div>Enter some text...</div>}
         ErrorBoundary={LexicalErrorBoundary}
       />
+      <OnChangePlugin onChange={() => console.log("change")} />
       <CollaborationPlugin
         id={noteId}
         providerFactory={createWebsocketProvider}
         initialEditorState={initialEditorState}
         shouldBootstrap={true}
       />
-      <OnChangePlugin onChange={saveEditorState} ignoreSelectionChange />
     </LexicalComposer>
   );
 }
@@ -60,25 +50,15 @@ function createWebsocketProvider(
   const doc = new Y.Doc();
   yjsDocMap.set(id, doc);
 
-  // const idbProvider = new IndexeddbPersistence(id, doc);
-  // idbProvider.once("synced", () => {
-  //   console.log("idb");
-  // });
 
-  // const wsProvider = new WebsocketProvider("ws://localhost:1234", id, doc, {
-  //   connect: false,
-  // });
-
-  const hocuspocusProvider = new TiptapCollabProvider({
-    websocketProvider: socket,
-    appId: 'vykoj4m5',
-    name: id,
-    token: "test",
+  const hocuspocusProvider = new HocuspocusProvider({
+    url: `ws://localhost:7398`,
+    name: `test-${id}`,
     document: doc,
+    onConnect: () => {
+      console.log("connected to:", `test-${id}`);
+    }
   });
-
-  // wsProvider.on("sync", () => console.log("ws"));
-  hocuspocusProvider.on("sync", () => console.log("hocuspocus"));
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore

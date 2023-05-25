@@ -30,9 +30,6 @@ export default function EditorPage() {
         <div style={{ border: "solid 1px" }}>
           <EditorCSR initialEditorState={currentEditorState} noteId={activeNote} />
         </div>
-        <div style={{ border: "solid 1px" }}>
-          <EditorCSR initialEditorState={currentEditorState} noteId={activeNote} />
-        </div>
       </div>
     </>
   );
