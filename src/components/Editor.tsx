@@ -6,7 +6,7 @@ import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { CollaborationPlugin } from "@lexical/react/LexicalCollaborationPlugin";
 import * as Y from "yjs";
 import { type Provider } from "@lexical/yjs";
-import { HocuspocusProvider } from "@hocuspocus/provider";
+import { HocuspocusProvider, HocuspocusProviderWebsocket } from "@hocuspocus/provider";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { useEffect } from "react";
 
@@ -47,6 +47,11 @@ function ListenerPlugin() {
   return null;
 }
 
+const socket = new HocuspocusProviderWebsocket({
+  url: `ws://localhost:4444`,
+  connect: false,
+});
+
 function createWebsocketProvider(
   id: string,
   yjsDocMap: Map<string, Y.Doc>
@@ -57,11 +62,8 @@ function createWebsocketProvider(
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   return new HocuspocusProvider({
-    url: `ws://localhost:7398`,
+    websocketProvider: socket,
     name: `test-${id}`,
     document: doc,
-    onConnect: () => {
-      console.log("connected to:", `test-${id}`);
-    },
   });
 }
