@@ -12,10 +12,10 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
-    "@hocuspocus/extension-logger": "2.0.6",
-    "@hocuspocus/extension-sqlite": "2.0.6",
-    "@hocuspocus/provider": "2.0.6",
-    "@hocuspocus/server": "2.0.6",
+    "@hocuspocus/extension-logger": "2.7.0",
+    "@hocuspocus/extension-sqlite": "2.7.0",
+    "@hocuspocus/provider": "2.7.0",
+    "@hocuspocus/server": "2.7.0",
     "@lexical/react": "0.12.5",
     "lexical": "0.12.5",
     "next": "13.1.2",

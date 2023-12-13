@@ -65,5 +65,8 @@ function createWebsocketProvider(
     websocketProvider: socket,
     name: `test-${id}`,
     document: doc,
+    onSynced: () => {
+      console.log("synced");
+    },
   });
 }
