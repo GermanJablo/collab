@@ -12,23 +12,17 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
-    "@hocuspocus/extension-logger": "^2.0.6",
-    "@hocuspocus/extension-sqlite": "^2.0.6",
-    "@hocuspocus/provider": "^2.0.3",
-    "@hocuspocus/server": "^2.0.6",
-    "@lexical/code": "^0.9.1",
-    "@lexical/headless": "^0.9.1",
-    "@lexical/link": "^0.9.1",
-    "@lexical/list": "^0.9.1",
-    "@lexical/mark": "^0.9.1",
-    "@lexical/react": "^0.9.1",
-    "@lexical/rich-text": "^0.9.1",
-    "@lexical/table": "^0.9.1",
-    "lexical": "^0.9.1",
+    "@hocuspocus/extension-logger": "2.0.6",
+    "@hocuspocus/extension-sqlite": "2.0.6",
+    "@hocuspocus/provider": "2.0.6",
+    "@hocuspocus/server": "2.0.6",
+    "@lexical/react": "0.12.5",
+    "lexical": "0.12.5",
     "next": "13.1.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "yjs": "^13.5.44"
+    "tsx": "^4.6.2",
+    "yjs": "13.6.10"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",
